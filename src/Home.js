@@ -13,10 +13,12 @@ function Home() {
     chickens: ''
   });
 
+  // Fetch farms from API
   useEffect(() => {
     const fetchFarms = async () => {
       try {
-        const response = await axios.get('/api/farms'); // Use relative URL
+        const apiUrl = process.env.REACT_APP_API_URL;
+        const response = await axios.get(`${apiUrl}/api/farms`); // Use environment variable for base URL
         setFarms(response.data);
       } catch (error) {
         console.error('Error fetching the farm data!', error);
@@ -45,7 +47,8 @@ function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`/api/farms/${selectedFarm._id}`, formData); // Use relative URL
+      const apiUrl = process.env.REACT_APP_API_URL;
+      await axios.put(`${apiUrl}/api/farms/${selectedFarm._id}`, formData); // Use environment variable for base URL
       // Update local state with edited farm
       const updatedFarms = farms.map(farm => (farm._id === selectedFarm._id ? { ...farm, ...formData } : farm));
       setFarms(updatedFarms);
@@ -123,7 +126,6 @@ function Home() {
 }
 
 export default Home;
-
 
 //import React, { useState, useEffect } from 'react';
 //import './Home.css';

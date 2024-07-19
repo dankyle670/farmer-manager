@@ -20,7 +20,8 @@ function Actions() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/farms', farmData); // Use relative URL
+      const apiUrl = process.env.REACT_APP_API_URL; // Use environment variable
+      const response = await axios.post(`${apiUrl}/farms`, farmData); // Use environment variable
       console.log('Farm Data Saved:', response.data);
       // Handle success, e.g., show a success message, clear form, etc.
     } catch (error) {
