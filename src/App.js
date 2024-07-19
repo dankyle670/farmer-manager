@@ -1,67 +1,59 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes } from 'react-router-dom';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Home from './Home';
+import Reports from './Reports';
+import Tasks from './Tasks';
+import Users from './Users';
+import Actions from './Actions';
+import AuthHandler from './AuthHandler';
 import netlifyIdentity from 'netlify-identity-widget';
+import Layout from './Layout'; // Import the Layout component
+import './App.css';
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   useEffect(() => {
-    const initNetlifyIdentity = () => {
-      netlifyIdentity.init({
-        container: '#netlify-modal', // Ensure this element exists in your HTML
-        locale: 'en', // Optional: Specify the locale
-      });
+    const user = netlifyIdentity.currentUser();
+    setIsLoggedIn(!!user);
 
-      netlifyIdentity.on('init', (user) => {
-        console.log('Netlify Identity user:', user);
-      });
+    netlifyIdentity.on('login', (user) => {
+      setIsLoggedIn(true);
+    });
 
-      netlifyIdentity.on('login', (user) => {
-        console.log('Logged in user:', user);
-        // Redirect or handle login success
-        window.location.href = '/servicesPrice'; // Example redirection
-      });
+    netlifyIdentity.on('logout', () => {
+      setIsLoggedIn(false);
+    });
 
-      // Event listeners for signup and login buttons
-      const signupButton = document.getElementById('signup-button');
-      const loginButton = document.getElementById('login-button');
-
-      if (signupButton) {
-        signupButton.addEventListener('click', (event) => {
-          event.preventDefault();
-          netlifyIdentity.open('signup');
-        });
-      }
-
-      if (loginButton) {
-        loginButton.addEventListener('click', (event) => {
-          event.preventDefault();
-          netlifyIdentity.open('login');
-        });
-      }
-    };
-
-    initNetlifyIdentity();
-
-    // Cleanup function
     return () => {
       netlifyIdentity.off('login');
-      netlifyIdentity.off('init');
+      netlifyIdentity.off('logout');
     };
   }, []);
 
   return (
     <Router>
+      <AuthHandler setIsLoggedIn={setIsLoggedIn} />
       <div className="App">
         <header className="App-header">
-          {/* Header content if needed */}
+          {isLoggedIn && <button onClick={() => netlifyIdentity.logout()} className="App-button">Logout</button>}
         </header>
-        <div className="App-buttons">
-          <button id="login-button" className="App-button">Login</button>
-          <button id="signup-button" className="App-button">Signup</button>
-        </div>
-        <Routes>
-          {/* Define your routes here */}
-        </Routes>
+        {!isLoggedIn ? (
+          <div className="App-buttons">
+            <button onClick={() => netlifyIdentity.open('login')} className="App-button">Login</button>
+            <button onClick={() => netlifyIdentity.open('signup')} className="App-button">Signup</button>
+          </div>
+        ) : (
+          <Routes>
+            <Route path="/" element={<Navigate to="/home" />} />
+            <Route path="/home" element={<Layout><Home /></Layout>} />
+            <Route path="/reports" element={<Layout><Reports /></Layout>} />
+            <Route path="/tasks" element={<Layout><Tasks /></Layout>} />
+            <Route path="/users" element={<Layout><Users /></Layout>} />
+            <Route path="/actions" element={<Layout><Actions /></Layout>} />
+            <Route path="*" element={<Navigate to="/home" />} />
+          </Routes>
+        )}
         <div id="netlify-modal"></div>
       </div>
     </Router>

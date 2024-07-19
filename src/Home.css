@@ -1,0 +1,26 @@
+.home-container {
+    padding: 20px;
+  }
+  
+  .farm-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .farm-item {
+    background: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    width: 200px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .farm-item h4 {
+    margin: 0;
+  }
+  
+  .actions-report, .content-section {
+    margin-top: 20px;
+  }
