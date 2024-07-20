@@ -13,6 +13,8 @@ function Home() {
     chickens: ''
   });
 
+  const farmPassword = process.env.REACT_APP_FARM_PASSWORD;
+
   // Fetch farms from API
   useEffect(() => {
     const fetchFarms = async () => {
@@ -30,8 +32,7 @@ function Home() {
 
   const handleEditFarm = (farm) => {
     const password = prompt('Enter the password to edit this farm:');
-    // Replace 'your-password' with your actual preset password
-    if (password === 'your-password') {
+    if (password === farmPassword) {
       setSelectedFarm(farm);
       setFormData({
         name: farm.name,
@@ -53,8 +54,7 @@ function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const password = prompt('Enter the password to save changes:');
-    // Replace 'your-password' with your actual preset password
-    if (password === 'your-password') {
+    if (password === farmPassword) {
       try {
         const apiUrl = process.env.REACT_APP_API_URL;
         await axios.put(`${apiUrl}/api/farms/${selectedFarm._id}`, formData); // Adjusted path
@@ -72,8 +72,7 @@ function Home() {
 
   const handleDeleteClick = async () => {
     const password = prompt('Enter the password to delete this farm:');
-    // Replace 'your-password' with your actual preset password
-    if (password === 'your-password') {
+    if (password === farmPassword) {
       try {
         const apiUrl = process.env.REACT_APP_API_URL;
         await axios.delete(`${apiUrl}/api/farms/${selectedFarm._id}`);
