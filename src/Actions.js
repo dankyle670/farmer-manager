@@ -5,6 +5,8 @@ import axios from 'axios';
 
 function Actions() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [password, setPassword] = useState('');
   const [farmData, setFarmData] = useState({
     name: '',
     location: '',
@@ -15,6 +17,21 @@ function Actions() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFarmData({ ...farmData, [name]: value });
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handlePasswordSubmit = (e) => {
+    e.preventDefault();
+    const presetPassword = 'your-password'; // Replace with your actual password
+    if (password === presetPassword) {
+      setIsPasswordModalOpen(false);
+      setIsModalOpen(true);
+    } else {
+      alert('Incorrect password');
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -35,7 +52,7 @@ function Actions() {
     <div className="actions-container">
       <h3>Farm Management Actions</h3>
       <div className="actions-buttons">
-        <button className="action-button" onClick={() => setIsModalOpen(true)}>
+        <button className="action-button" onClick={() => setIsPasswordModalOpen(true)}>
           <FaWarehouse className="action-icon" />
           Create New Farm
         </button>
@@ -60,6 +77,27 @@ function Actions() {
           Check Inventory
         </button>
       </div>
+
+      {isPasswordModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <h4>Enter Password</h4>
+            <form onSubmit={handlePasswordSubmit}>
+              <div className="form-group">
+                <label>Password</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={handlePasswordChange}
+                  required
+                />
+              </div>
+              <button type="submit" className="submit-button">Submit</button>
+              <button type="button" className="close-button" onClick={() => setIsPasswordModalOpen(false)}>Close</button>
+            </form>
+          </div>
+        </div>
+      )}
 
       {isModalOpen && (
         <div className="modal">

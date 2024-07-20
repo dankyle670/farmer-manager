@@ -29,14 +29,20 @@ function Home() {
   }, []);
 
   const handleEditFarm = (farm) => {
-    setSelectedFarm(farm);
-    setFormData({
-      name: farm.name,
-      location: farm.location,
-      area: farm.area,
-      chickens: farm.chickens
-    });
-    setIsModalOpen(true);
+    const password = prompt('Enter the password to edit this farm:');
+    // Replace 'your-password' with your actual preset password
+    if (password === 'your-password') {
+      setSelectedFarm(farm);
+      setFormData({
+        name: farm.name,
+        location: farm.location,
+        area: farm.area,
+        chickens: farm.chickens
+      });
+      setIsModalOpen(true);
+    } else {
+      alert('Incorrect password. You cannot edit this farm.');
+    }
   };
 
   const handleInputChange = (e) => {
@@ -46,15 +52,39 @@ function Home() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const apiUrl = process.env.REACT_APP_API_URL;
-      await axios.put(`${apiUrl}/api/farms/${selectedFarm._id}`, formData); // Adjusted path
-      // Update local state with edited farm
-      const updatedFarms = farms.map(farm => (farm._id === selectedFarm._id ? { ...farm, ...formData } : farm));
-      setFarms(updatedFarms);
-      setIsModalOpen(false);
-    } catch (error) {
-      console.error('Error updating farm:', error);
+    const password = prompt('Enter the password to save changes:');
+    // Replace 'your-password' with your actual preset password
+    if (password === 'your-password') {
+      try {
+        const apiUrl = process.env.REACT_APP_API_URL;
+        await axios.put(`${apiUrl}/api/farms/${selectedFarm._id}`, formData); // Adjusted path
+        // Update local state with edited farm
+        const updatedFarms = farms.map(farm => (farm._id === selectedFarm._id ? { ...farm, ...formData } : farm));
+        setFarms(updatedFarms);
+        setIsModalOpen(false);
+      } catch (error) {
+        console.error('Error updating farm:', error);
+      }
+    } else {
+      alert('Incorrect password. Changes were not saved.');
+    }
+  };
+
+  const handleDeleteClick = async () => {
+    const password = prompt('Enter the password to delete this farm:');
+    // Replace 'your-password' with your actual preset password
+    if (password === 'your-password') {
+      try {
+        const apiUrl = process.env.REACT_APP_API_URL;
+        await axios.delete(`${apiUrl}/api/farms/${selectedFarm._id}`);
+        // Update local state to remove the deleted farm
+        setFarms(farms.filter(farm => farm._id !== selectedFarm._id));
+        setIsModalOpen(false);
+      } catch (error) {
+        console.error('Error deleting farm:', error);
+      }
+    } else {
+      alert('Incorrect password. The farm was not deleted.');
     }
   };
 
@@ -117,6 +147,7 @@ function Home() {
               </div>
               <button type="submit" className="submit-button">Save Changes</button>
               <button type="button" className="close-button" onClick={() => setIsModalOpen(false)}>Close</button>
+              <button type="button" className="delete-button" onClick={handleDeleteClick}>Delete</button>
             </form>
           </div>
         </div>

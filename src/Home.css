@@ -1,26 +1,96 @@
 .home-container {
-    padding: 20px;
-  }
-  
-  .farm-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  
-  .farm-item {
-    background: #f4f4f4;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 10px;
-    width: 200px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .farm-item h4 {
-    margin: 0;
-  }
-  
-  .actions-report, .content-section {
-    margin-top: 20px;
-  }
+  padding: 20px;
+}
+
+.farm-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.farm-item {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin: 10px;
+  cursor: pointer;
+  width: calc(33.333% - 20px);
+  box-sizing: border-box;
+  transition: background 0.3s;
+}
+
+.farm-item:hover {
+  background: #eee;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  width: 400px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: calc(100% - 10px);
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+
+.submit-button, .close-button, .delete-button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: background 0.3s;
+}
+
+.submit-button {
+  background: #4caf50;
+  color: white;
+}
+
+.submit-button:hover {
+  background: #45a049;
+}
+
+.close-button {
+  background: #f44336;
+  color: white;
+}
+
+.close-button:hover {
+  background: #e53935;
+}
+
+.delete-button {
+  background: #f44336;
+  color: white;
+}
+
+.delete-button:hover {
+  background: #e53935;
+}
