@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Reports.css';
 import axios from 'axios';
 import { saveAs } from 'file-saver';
-import { Bar } from 'react-chartjs-2';
+//import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -24,20 +24,20 @@ ChartJS.register(
 
 function Reports() {
   const [logs, setLogs] = useState([]);
-  const [financials, setFinancials] = useState([]);
-  const [view, setView] = useState('table'); // 'table' or 'chart'
-  const [selectedFarm, setSelectedFarm] = useState(''); // State for selected farm
-  const [farms, setFarms] = useState([]); // State to store farm data
-  const [isFinancialsModalOpen, setIsFinancialsModalOpen] = useState(false); // State for managing modal visibility
-  const [selectedFarmId, setSelectedFarmId] = useState(''); // State for selected farm in modal
-  const [financialsData, setFinancialsData] = useState({ // State for managing financial input data
-    spent: 0,
-    spent_com: '',
-    earnings: 0,
-    earnings_com: '',
-    profit: 0,
-    turnover: 0,
-  });
+  //const [financials, setFinancials] = useState([]);
+  //const [view, setView] = useState('table'); // 'table' or 'chart'
+  //const [selectedFarm, setSelectedFarm] = useState(''); // State for selected farm
+  //const [farms, setFarms] = useState([]); // State to store farm data
+  //const [isFinancialsModalOpen, setIsFinancialsModalOpen] = useState(false); // State for managing modal visibility
+  //const [selectedFarmId, setSelectedFarmId] = useState(''); // State for selected farm in modal
+  //const [financialsData, setFinancialsData] = useState({ // State for managing financial input data
+  //  spent: 0,
+  //  spent_com: '',
+  //  earnings: 0,
+  //  earnings_com: '',
+  //  profit: 0,
+  //  turnover: 0,
+  //});
 
   useEffect(() => {
     const fetchLogs = async () => {
@@ -49,31 +49,31 @@ function Reports() {
       }
     };
 
-    const fetchFinancials = async () => {
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/financials`);
-        console.log('Financials API Response:', response.data); // Debug: Log API response
-        setFinancials(response.data);
-      } catch (error) {
-        console.error('Error fetching financials:', error);
-      }
-    };
+    //const fetchFinancials = async () => {
+    //  try {
+    //    const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/financials`);
+    //    console.log('Financials API Response:', response.data); // Debug: Log API response
+    //    setFinancials(response.data);
+    //  } catch (error) {
+    //    console.error('Error fetching financials:', error);
+    //  }
+    //};
 
-    const fetchFarms = async () => {
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/farms`);
-        setFarms(response.data);
-        if (response.data.length > 0) {
-          setSelectedFarm(response.data[0]._id); // Set the initial selected farm
-        }
-      } catch (error) {
-        console.error('Error fetching farms:', error);
-      }
-    };
+    //const fetchFarms = async () => {
+    //  try {
+    //    const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/farms`);
+    //    setFarms(response.data);
+    //    if (response.data.length > 0) {
+    //      setSelectedFarm(response.data[0]._id); // Set the initial selected farm
+    //    }
+    //  } catch (error) {
+    //    console.error('Error fetching farms:', error);
+    //  }
+    //};
 
     fetchLogs();
-    fetchFinancials();
-    fetchFarms();
+    //fetchFinancials();
+    //fetchFarms();
   }, []);
 
   const last10Logs = logs.slice(-10);
