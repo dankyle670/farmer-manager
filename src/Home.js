@@ -10,8 +10,12 @@ function Home() {
     name: '',
     location: '',
     area: '',
-    chickens: ''
+    chickens: '',
+    spent: 0,
+    turnover: 0,
+    profit: 0
   });
+  const [tasks, setTasks] = useState([]);
 
   const farmPassword = process.env.REACT_APP_FARM_PASSWORD;
 
@@ -20,7 +24,7 @@ function Home() {
     const fetchFarms = async () => {
       try {
         const apiUrl = process.env.REACT_APP_API_URL;
-        const response = await axios.get(`${apiUrl}/api/farms`); // Adjusted path
+        const response = await axios.get(`${apiUrl}/api/farms`);
         setFarms(response.data);
       } catch (error) {
         console.error('Error fetching the farm data!', error);
@@ -28,6 +32,21 @@ function Home() {
     };
 
     fetchFarms();
+  }, []);
+
+  // Fetch tasks from API
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const apiUrl = process.env.REACT_APP_API_URL;
+        const response = await axios.get(`${apiUrl}/api/tasks`);
+        setTasks(response.data);
+      } catch (error) {
+        console.error('Error fetching tasks:', error);
+      }
+    };
+
+    fetchTasks();
   }, []);
 
   const handleEditFarm = (farm) => {
@@ -38,7 +57,10 @@ function Home() {
         name: farm.name,
         location: farm.location,
         area: farm.area,
-        chickens: farm.chickens
+        chickens: farm.chickens,
+        spent: farm.spent,
+        turnover: farm.turnover,
+        profit: farm.profit
       });
       setIsModalOpen(true);
     } else {
@@ -57,9 +79,10 @@ function Home() {
     if (password === farmPassword) {
       try {
         const apiUrl = process.env.REACT_APP_API_URL;
-        await axios.put(`${apiUrl}/api/farms/${selectedFarm._id}`, formData); // Adjusted path
+        const updatedFarmData = { ...formData, profit: formData.turnover - formData.spent };
+        await axios.put(`${apiUrl}/api/farms/${selectedFarm._id}`, updatedFarmData);
         // Update local state with edited farm
-        const updatedFarms = farms.map(farm => (farm._id === selectedFarm._id ? { ...farm, ...formData } : farm));
+        const updatedFarms = farms.map(farm => (farm._id === selectedFarm._id ? { ...farm, ...updatedFarmData } : farm));
         setFarms(updatedFarms);
         setIsModalOpen(false);
       } catch (error) {
@@ -72,6 +95,7 @@ function Home() {
 
   const handleDeleteClick = async () => {
     const password = prompt('Enter the password to delete this farm:');
+
     if (password === farmPassword) {
       try {
         const apiUrl = process.env.REACT_APP_API_URL;
@@ -144,6 +168,35 @@ function Home() {
                   required
                 />
               </div>
+              <div className="form-group">
+                <label>Spent</label>
+                <input
+                  type="number"
+                  name="spent"
+                  value={formData.spent}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Turnover</label>
+                <input
+                  type="number"
+                  name="turnover"
+                  value={formData.turnover}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Profit</label>
+                <input
+                  type="number"
+                  name="profit"
+                  value={formData.turnover - formData.spent}
+                  readOnly
+                />
+              </div>
               <button type="submit" className="submit-button">Save Changes</button>
               <button type="button" className="close-button" onClick={() => setIsModalOpen(false)}>Close</button>
               <button type="button" className="delete-button" onClick={handleDeleteClick}>Delete</button>
@@ -151,6 +204,23 @@ function Home() {
           </div>
         </div>
       )}
+
+    <div className="tasks-section">
+        <h3>Tasks</h3>
+        <div className="tasks-list">
+          {tasks.length === 0 ? (
+            <p>No tasks available.</p>
+          ) : (
+            tasks.map((task, index) => (
+              <div key={index} className="task-item">
+                <p>{task.description}</p>
+                <span>{new Date(task.date).toLocaleDateString()}</span>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+      
     </div>
   );
 }

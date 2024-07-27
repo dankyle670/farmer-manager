@@ -1,0 +1,24 @@
+.users-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin: 10px 0;
+    cursor: pointer;
+  }
+  
+  .location-info {
+    margin-top: 20px;
+  }
+  
+  h4 {
+    margin-bottom: 10px;
+  }
+  
+  p {
+    margin: 5px 0;
+  }
+  
